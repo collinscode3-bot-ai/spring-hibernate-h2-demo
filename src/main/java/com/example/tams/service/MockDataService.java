@@ -20,6 +20,7 @@ public class MockDataService {
     private final TestCaseMasterRepository caseRepo;
     private final TestSuiteTestCaseMappingRepository suiteCaseRepo;
     private final TestCaseVerificationContractsMappingRepository caseContractRepo;
+    private final TestCaseVerificationsContractsMappingRepository verificationsContractRepo;
     private final TestCaseVerificationsMasterRepository verificationRepo;
     private final TestDataMasterRepository dataRepo;
     private final VerificationParameterMasterRepository verificationParamRepo;
@@ -88,6 +89,11 @@ public class MockDataService {
         caseContractMapping.setTestCase(testCase);
         caseContractMapping.setContract(contract);
         caseContractRepo.save(caseContractMapping);
+
+        TestCaseVerificationsContractsMapping verificationsContractMapping = new TestCaseVerificationsContractsMapping();
+        verificationsContractMapping.setTestCase(testCase);
+        verificationsContractMapping.setContract(contract);
+        verificationsContractRepo.save(verificationsContractMapping);
 
         TestCaseVerificationsMaster verification = new TestCaseVerificationsMaster();
         verification.setTestCase(testCase);

@@ -35,6 +35,10 @@ public class TestCaseMaster {
 
     @OneToMany(mappedBy = "testCase", cascade = CascadeType.ALL)
     @ToString.Exclude
+    private List<TestCaseVerificationsContractsMapping> verificationsContractMappings;
+
+    @OneToMany(mappedBy = "testCase", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<TestCaseVerificationsMaster> verifications;
 
     @OneToMany(mappedBy = "testCase", cascade = CascadeType.ALL)
