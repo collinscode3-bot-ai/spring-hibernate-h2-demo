@@ -1,7 +1,8 @@
 package com.example.tams;
 
-import com.example.tams.model.ProjectMaster;
-import com.example.tams.repository.ProjectMasterRepository;
+import com.example.tams.model.Project;
+import com.example.tams.repository.ProjectRepository;
+import com.example.tams.util.IdUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TamsApplicationTests {
 
 	@Autowired
-	private ProjectMasterRepository projectRepo;
+	private ProjectRepository projectRepo;
 
 	@Test
 	void contextLoads() {
@@ -23,29 +24,30 @@ class TamsApplicationTests {
 	@Test
 	void testProjectCrudOperations() {
 		// 1. Create (Save)
-		ProjectMaster project = new ProjectMaster();
+		Project project = new Project();
+		String customId = IdUtils.generateId("PRJ");
+		project.setProjectId(customId);
 		project.setProjectName("CRUD Test Project");
 		project.setProjectDesc("Testing CRUD operations");
 		project = projectRepo.save(project);
-		Long id = project.getProjectId();
-		assertThat(id).isNotNull();
+		assertThat(project.getProjectId()).isEqualTo(customId);
 
 		// 2. Retrieval
-		Optional<ProjectMaster> retrieved = projectRepo.findById(id);
+		Optional<Project> retrieved = projectRepo.findById(customId);
 		assertThat(retrieved).isPresent();
 		assertThat(retrieved.get().getProjectName()).isEqualTo("CRUD Test Project");
 
 		// 3. Update
-		ProjectMaster toUpdate = retrieved.get();
+		Project toUpdate = retrieved.get();
 		toUpdate.setProjectName("Updated Project Name");
 		projectRepo.save(toUpdate);
 
-		ProjectMaster updated = projectRepo.findById(id).get();
+		Project updated = projectRepo.findById(customId).get();
 		assertThat(updated.getProjectName()).isEqualTo("Updated Project Name");
 
 		// 4. Delete
-		projectRepo.deleteById(id);
-		assertThat(projectRepo.findById(id)).isEmpty();
+		projectRepo.deleteById(customId);
+		assertThat(projectRepo.findById(customId)).isEmpty();
 	}
 
 }

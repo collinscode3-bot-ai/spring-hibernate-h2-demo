@@ -2,6 +2,7 @@ package com.example.tams.service;
 
 import com.example.tams.model.*;
 import com.example.tams.repository.*;
+import com.example.tams.util.IdUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,50 +13,55 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class MockDataService {
 
-    private final ProjectMasterRepository projectRepo;
-    private final TestSuiteMasterRepository suiteRepo;
-    private final ContractMasterRepository contractRepo;
-    private final ProjectTestSuiteMappingRepository projectSuiteRepo;
-    private final ContractFieldPropertiesRepository fieldRepo;
-    private final TestCaseMasterRepository caseRepo;
-    private final TestSuiteTestCaseMappingRepository suiteCaseRepo;
-    private final TestCaseVerificationContractsMappingRepository caseContractRepo;
-    private final TestCaseVerificationsContractsMappingRepository verificationsContractRepo;
-    private final TestCaseVerificationsMasterRepository verificationRepo;
-    private final TestDataMasterRepository dataRepo;
-    private final VerificationParameterMasterRepository verificationParamRepo;
-    private final ValidationsMasterRepository validationRepo;
-    private final ValidationParameterMasterRepository validationParamRepo;
-    private final ExpectedDataMasterRepository expectedDataRepo;
-    private final TestExecutionMasterRepository executionRepo;
-    private final TestRunResultsRepository runRepo;
+    private final ProjectRepository projectRepo;
+    private final TestSuiteRepository suiteRepo;
+    private final ContractRepository contractRepo;
+    private final ProjectTestSuiteRepository projectSuiteRepo;
+    private final ContractFieldPropertyRepository fieldRepo;
+    private final TestCaseRepository caseRepo;
+    private final TestSuiteTestCaseRepository suiteCaseRepo;
+    private final TestCaseVerificationContractRepository caseContractRepo;
+    private final TestCaseVerificationsContractRepository verificationsContractRepo;
+    private final TestCaseVerificationRepository verificationRepo;
+    private final TestDataRepository dataRepo;
+    private final VerificationParameterRepository verificationParamRepo;
+    private final ValidationRepository validationRepo;
+    private final ValidationParameterRepository validationParamRepo;
+    private final ExpectedDataRepository expectedDataRepo;
+    private final TestExecutionRepository executionRepo;
+    private final TestRunResultRepository runRepo;
 
     @Transactional
     public void generateMockData() {
         // 1. Core Masters
-        ProjectMaster project = new ProjectMaster();
+        Project project = new Project();
+        project.setProjectId(IdUtils.generateId("PRJ"));
         project.setProjectName("Project Alpha");
         project.setProjectDesc("Description for Alpha");
         project = projectRepo.save(project);
 
-        TestSuiteMaster suite = new TestSuiteMaster();
+        TestSuite suite = new TestSuite();
+        suite.setTestSuiteId(IdUtils.generateId("TS"));
         suite.setSuiteName("E2E Suite");
         suite.setSuiteDesc("End to end tests");
         suite.setType("E2E_TEST");
         suite = suiteRepo.save(suite);
 
-        ContractMaster contract = new ContractMaster();
+        Contract contract = new Contract();
+        contract.setContractId(IdUtils.generateId("CON"));
         contract.setContractSchemaJson("{}");
         contract.setContractBaseJson("{}");
         contract = contractRepo.save(contract);
 
         // 2. Mappings and Secondary Masters
-        ProjectTestSuiteMapping projectSuiteMapping = new ProjectTestSuiteMapping();
+        ProjectTestSuite projectSuiteMapping = new ProjectTestSuite();
+        projectSuiteMapping.setMappingId(IdUtils.generateId("PTS"));
         projectSuiteMapping.setProject(project);
         projectSuiteMapping.setTestSuite(suite);
         projectSuiteRepo.save(projectSuiteMapping);
 
-        ContractFieldProperties fieldProperties = new ContractFieldProperties();
+        ContractFieldProperty fieldProperties = new ContractFieldProperty();
+        fieldProperties.setFieldId(IdUtils.generateId("CFP"));
         fieldProperties.setContract(contract);
         fieldProperties.setJsonKey("userId");
         fieldProperties.setIsMandatory("Y");
@@ -66,7 +72,8 @@ public class MockDataService {
         fieldProperties.setFieldFormat("UUID");
         fieldRepo.save(fieldProperties);
 
-        TestCaseMaster testCase = new TestCaseMaster();
+        TestCase testCase = new TestCase();
+        testCase.setTestCaseId(IdUtils.generateId("TC"));
         testCase.setTestName("Login Test");
         testCase.setTestDescription("Verify user login");
         testCase.setAction("POST");
@@ -79,23 +86,27 @@ public class MockDataService {
         testCase = caseRepo.save(testCase);
 
         // 3. Tertiary
-        TestSuiteTestCaseMapping suiteCaseMapping = new TestSuiteTestCaseMapping();
+        TestSuiteTestCase suiteCaseMapping = new TestSuiteTestCase();
+        suiteCaseMapping.setMappingId(IdUtils.generateId("TTC"));
         suiteCaseMapping.setTestSuite(suite);
         suiteCaseMapping.setTestCase(testCase);
         suiteCaseMapping.setSequenceNo(1);
         suiteCaseRepo.save(suiteCaseMapping);
 
-        TestCaseVerificationContractsMapping caseContractMapping = new TestCaseVerificationContractsMapping();
+        TestCaseVerificationContract caseContractMapping = new TestCaseVerificationContract();
+        caseContractMapping.setMappingId(IdUtils.generateId("TVC"));
         caseContractMapping.setTestCase(testCase);
         caseContractMapping.setContract(contract);
         caseContractRepo.save(caseContractMapping);
 
-        TestCaseVerificationsContractsMapping verificationsContractMapping = new TestCaseVerificationsContractsMapping();
+        TestCaseVerificationsContract verificationsContractMapping = new TestCaseVerificationsContract();
+        verificationsContractMapping.setMappingId(IdUtils.generateId("VCM"));
         verificationsContractMapping.setTestCase(testCase);
         verificationsContractMapping.setContract(contract);
         verificationsContractRepo.save(verificationsContractMapping);
 
-        TestCaseVerificationsMaster verification = new TestCaseVerificationsMaster();
+        TestCaseVerification verification = new TestCaseVerification();
+        verification.setVerificationId(IdUtils.generateId("VER"));
         verification.setTestCase(testCase);
         verification.setAppName("AuthService");
         verification.setServiceName("SessionService");
@@ -104,14 +115,16 @@ public class MockDataService {
         verification.setVerifyOnlyIfPrevSuccess("Y");
         verification = verificationRepo.save(verification);
 
-        TestDataMaster testData = new TestDataMaster();
+        TestData testData = new TestData();
+        testData.setTestDataId(IdUtils.generateId("TD"));
         testData.setTestCase(testCase);
         testData.setUploadedTestData("{\"user\":\"test\"}");
         testData.setFinalTestData("{\"user\":\"test\",\"pass\":\"123\"}");
         testData = dataRepo.save(testData);
 
         // 4. Verification Params and Validations
-        VerificationParameterMaster verificationParam = new VerificationParameterMaster();
+        VerificationParameter verificationParam = new VerificationParameter();
+        verificationParam.setParameterId(IdUtils.generateId("VP"));
         verificationParam.setParamKey("token");
         verificationParam.setValueSource("HEADER");
         verificationParam.setParamValue("Bearer xyz");
@@ -121,7 +134,8 @@ public class MockDataService {
         verificationParam.setValueDataType("String");
         verificationParamRepo.save(verificationParam);
 
-        ValidationsMaster validation = new ValidationsMaster();
+        Validation validation = new Validation();
+        validation.setValidationId(IdUtils.generateId("VAL"));
         validation.setVerification(verification);
         validation.setValidationType("STATUS_CODE");
         validation.setValidationName("Check 200");
@@ -131,7 +145,8 @@ public class MockDataService {
         validation = validationRepo.save(validation);
 
         // 5. Validation Params, Expected Data, Execution
-        ValidationParameterMaster validationParam = new ValidationParameterMaster();
+        ValidationParameter validationParam = new ValidationParameter();
+        validationParam.setParameterId(IdUtils.generateId("VLP"));
         validationParam.setValidation(validation);
         validationParam.setSequenceNo(1);
         validationParam.setParameterType("EXPECTED");
@@ -139,7 +154,8 @@ public class MockDataService {
         validationParam.setParameterValue("200");
         validationParamRepo.save(validationParam);
 
-        ExpectedDataMaster expectedData = new ExpectedDataMaster();
+        ExpectedData expectedData = new ExpectedData();
+        expectedData.setExpectedDataId(IdUtils.generateId("ED"));
         expectedData.setTestCase(testCase);
         expectedData.setTestData(testData);
         expectedData.setVerification(verification);
@@ -147,7 +163,8 @@ public class MockDataService {
         expectedData.setExpectedData("Success");
         expectedDataRepo.save(expectedData);
 
-        TestExecutionMaster execution = new TestExecutionMaster();
+        TestExecution execution = new TestExecution();
+        execution.setExecutionId(IdUtils.generateId("EXE"));
         execution.setTestSuite(suite);
         execution.setStartTime(LocalDateTime.now().minusMinutes(10));
         execution.setEndTime(LocalDateTime.now());
@@ -155,7 +172,8 @@ public class MockDataService {
         execution = executionRepo.save(execution);
 
         // 6. Run Results
-        TestRunResults result = new TestRunResults();
+        TestRunResult result = new TestRunResult();
+        result.setRunId(IdUtils.generateId("RUN"));
         result.setExecution(execution);
         result.setTestCase(testCase);
         result.setVerification(verification);
