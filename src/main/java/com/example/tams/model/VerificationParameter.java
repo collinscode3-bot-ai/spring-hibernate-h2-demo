@@ -6,9 +6,10 @@ import lombok.*;
 @Entity
 @Table(name = "verification_parameters")
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class VerificationParameter {
+public class VerificationParameter extends BaseAuditEntity {
     @Id
     private String parameterId;
 

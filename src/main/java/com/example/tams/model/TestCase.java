@@ -7,9 +7,10 @@ import java.util.List;
 @Entity
 @Table(name = "test_cases")
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class TestCase {
+public class TestCase extends BaseAuditEntity {
     @Id
     private String testCaseId;
     private String testName;

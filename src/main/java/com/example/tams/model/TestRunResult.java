@@ -6,9 +6,10 @@ import lombok.*;
 @Entity
 @Table(name = "test_run_results")
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class TestRunResult {
+public class TestRunResult extends BaseAuditEntity {
     @Id
     private String runId;
 

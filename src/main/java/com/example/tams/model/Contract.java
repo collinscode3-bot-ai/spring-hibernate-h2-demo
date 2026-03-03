@@ -7,9 +7,10 @@ import java.util.List;
 @Entity
 @Table(name = "contracts")
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Contract {
+public class Contract extends BaseAuditEntity {
     @Id
     private String contractId;
 
