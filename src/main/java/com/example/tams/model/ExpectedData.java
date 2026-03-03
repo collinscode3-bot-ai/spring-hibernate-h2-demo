@@ -6,9 +6,10 @@ import lombok.*;
 @Entity
 @Table(name = "expected_data")
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExpectedData {
+public class ExpectedData extends BaseAuditEntity {
     @Id
     private String expectedDataId;
 

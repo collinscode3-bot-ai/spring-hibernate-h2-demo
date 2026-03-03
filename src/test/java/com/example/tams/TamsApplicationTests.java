@@ -22,6 +22,22 @@ class TamsApplicationTests {
 	}
 
 	@Test
+	void testAuditingFields() {
+		Project project = new Project();
+		String customId = IdUtils.generateId("PRJ");
+		project.setProjectId(customId);
+		project.setProjectName("Audit Test Project");
+		project.setProjectDesc("Testing auditing fields");
+
+		project = projectRepo.save(project);
+
+		assertThat(project.getCreatedAt()).isNotNull();
+		assertThat(project.getCreatedBy()).isEqualTo("system");
+		assertThat(project.getUpdatedAt()).isNotNull();
+		assertThat(project.getUpdatedBy()).isEqualTo("system");
+	}
+
+	@Test
 	void testProjectCrudOperations() {
 		// 1. Create (Save)
 		Project project = new Project();

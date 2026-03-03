@@ -7,9 +7,10 @@ import java.util.List;
 @Entity
 @Table(name = "validations")
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Validation {
+public class Validation extends BaseAuditEntity {
     @Id
     private String validationId;
 

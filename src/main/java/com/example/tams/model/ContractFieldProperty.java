@@ -6,9 +6,10 @@ import lombok.*;
 @Entity
 @Table(name = "contract_field_properties")
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContractFieldProperty {
+public class ContractFieldProperty extends BaseAuditEntity {
     @Id
     private String fieldId;
 

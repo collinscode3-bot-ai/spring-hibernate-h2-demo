@@ -6,9 +6,10 @@ import lombok.*;
 @Entity
 @Table(name = "test_case_verifications_contracts")
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class TestCaseVerificationsContract {
+public class TestCaseVerificationsContract extends BaseAuditEntity {
     @Id
     private String mappingId;
 
